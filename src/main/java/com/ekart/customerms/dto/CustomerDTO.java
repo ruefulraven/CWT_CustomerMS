@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 import com.ekart.customerms.entity.Customer;
 import com.ekart.customerms.utility.PasswordConstraint;
 import com.ekart.customerms.utility.PhoneNumberConstraint;
+import com.ekart.customerms.utility.PhoneNumberExistsConstraint;
 import com.ekart.customerms.utility.UsernameConstraint;
 
 import lombok.AllArgsConstructor;
@@ -33,6 +34,7 @@ public class CustomerDTO {
 	private String password;
 	
 	@PhoneNumberConstraint
+	@PhoneNumberExistsConstraint
 	@NotNull(message = "Phone Number cant be empty")
 	private Long phoneNumber;
 	

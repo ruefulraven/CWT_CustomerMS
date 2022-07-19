@@ -6,4 +6,5 @@ public interface CustomerService {
 	//RegisterCustomer
 	void registerCustomer(Customer register);
 	Customer login(String email, String password);
+	public boolean checkRegisterNumber(Long phoneNumber);
 }

@@ -130,6 +130,7 @@ public class CustomerMSController {
 	public String register(@Valid @ModelAttribute CustomerDTO registerDTO, BindingResult bindingResult, Model model ) {
 		model.addAttribute("register", registerDTO);
 		List<String> fieldErrors = new ArrayList<>();
+		
 		if(bindingResult.hasErrors()) {
 			registerDTO = restController.verifyRegisterDetails(registerDTO, bindingResult);
 			for(FieldError errors: bindingResult.getFieldErrors()) {

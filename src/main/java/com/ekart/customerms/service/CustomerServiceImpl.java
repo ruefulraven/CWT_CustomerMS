@@ -27,5 +27,11 @@ public class CustomerServiceImpl  implements CustomerService{
 	public void sample() {
 		
 	}
+
+	@Override
+	public boolean checkRegisterNumber(Long phoneNumber) {
+		boolean numberExists = repository.findAll().stream().filter(customer -> customer.getPhoneNumber().equals(phoneNumber)).findAny().isPresent();
+		return numberExists;
+	}
 	
 }
