@@ -1,0 +1,12 @@
+.mainDiv{
+	margin-top: 2%;
+	text-align: center
+}
+
+.errorContainer{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}

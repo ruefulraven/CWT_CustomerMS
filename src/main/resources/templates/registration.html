@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link rel = "stylesheet" th:href = "@{/CustomerMainPage.css}">
+<title>EKART Customer Page</title>
+</head>
+<body>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	  <div class="container-fluid">
+	    <a class="navbar-brand" href="#">EKART</a>
+	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+	      <span class="navbar-toggler-icon"></span>
+	    </button>
+	    <div class="collapse navbar-collapse" id="navbarNav">
+	      <ul class="navbar-nav">
+	        <li class="nav-item">
+	          <a class="nav-link active" aria-current="page" th:href="@{/}">Home</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link" href="#">Our Available Products</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+	        </li>
+	        
+	      </ul>
+	      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+		    <li class="nav-item">
+		      <a class="nav-link" th:href="@{/registration}">Register</a>
+		    </li>
+		    <li class="nav-item">
+		      <a class="nav-link" th:href="@{/loginCustomer}">Login</a>
+		    </li>
+		  </ul>
+	    </div>
+	  </div>
+	</nav>
+	<div class = "row">
+		<div class = "col">
+			<div style = "border-color: red;" class="errorContainer p-3 mb-2 text-dark w-50 d-flex align-items-center justify-content-center">
+				<ul>
+					<li th:each="error : ${errors}">
+						<h6 class = "text-danger" th:text="${error}"></h6>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class = "col">
+			<div class = "mainDiv">
+				<h1>Register Form</h1>
+				<form action = "#" th:action = "@{/register}" th:object = "${register}" method = "post">
+					<p>first name: <input type = "text" th:field="*{firstName}"></p>
+					<p>last name: <input type = "text" th:field="*{lastName}"></p>
+					<p>email: <input type = "email" th:field="*{email}"></p>
+					<p>PhoneNumber: <input type = "number" th:field="*{phoneNumber}"></p>
+					<p>Password: <input type = "password" th:field="*{password}"></p>
+					<input type="submit" value = "submit" class = "btn btn-success">
+				</form>
+			</div>
+		</div>
+	</div>
+	<h1></h1>
+	
+	<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+</body>
+</html>

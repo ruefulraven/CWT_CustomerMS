@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<link rel = "stylesheet" th:href = "@{/CustomerMainPage.css}">
+<script src="https://use.fontawesome.com/984dd6bfef.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<title>EKART Login Page</title>
+</head>
+<body>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	  <div class="container-fluid">
+	    <a class="navbar-brand" href="#">EKART</a>
+	    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+	      <span class="navbar-toggler-icon"></span>
+	    </button>
+	    <div class="collapse navbar-collapse" id="navbarNav">
+	      <ul class="navbar-nav">
+	        <li class="nav-item">
+	          <a class="nav-link active" aria-current="page" th:href="@{/home}">Home</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link" href="#">Our Available Products</a>
+	        </li>
+	        <li class="nav-item">
+	          <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+	        </li>
+	        
+	      </ul>
+	      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+		    <li class="nav-item">
+		      <!-- <a class="nav-link" th:href="@{/home}" th:text="${customer.firstName}"><i class="fa fa-cart-plus" aria-hidden="true"></i></a> -->
+		      <a class="nav-link" th:href="@{/home}" ><i class="fa fa-cart-plus" aria-hidden="true"></i></a>
+		    </li>
+		  </ul>
+	    </div>
+	  </div>
+	</nav>
+	<div class = "mainDiv">
+		<div class="alert alert-success" role="alert">
+		  Welcome back <H1 th:text="${customer.firstName}"></H1>
+		</div>
+	</div>
+	<div class = "container">
+		<div class = "row">
+			<div class = "col">
+				<div class = "productDiv">
+					<h1>Your Cart Details</h1>
+					<ul>
+						<li th:each="error : ${errors}" th:text="${error}">
+					</ul>
+					<div th:if = "${customerCart != null}">
+						<table class = "table">
+							<tr>
+								<td>Cart Id</td>
+								<td>Product Name</td>
+								<td>Price</td>
+								<td>Quantity</td>
+								<td>Actions</td>
+							</tr>
+							<tr th:each = "cartDTO: ${customerCart}">
+								<form th:action = "@{/delete}" method = "post">
+									<td th:text = "${cartDTO.cartId}" />
+									<td th:text = "${cartDTO.product.productName}" />
+									<td th:text = "${cartDTO.product.price}">
+									<td th:text = "${cartDTO.count}" />
+									<td>
+										<input type = "hidden" th:value = "${cartDTO.cartId}" name = "id">
+										<input type = "submit" value = "Delete" class = "btn btn-danger">
+									</td>
+								</form>
+							</tr>
+						</table>
+					</div>
+					<div th:if = "${customerCart == null}">
+						<h3>Add Items to cart</h3>
+					</div>
+					<!-- Button trigger modal -->
+					<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+					 	Payment
+					</button>
+					
+					<!-- Modal -->
+					<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					  <div class="modal-dialog">
+					    <div class="modal-content">
+					      <div class="modal-header">
+					        <h5 class="modal-title" id="exampleModalLabel">EKart Mode Pay</h5>
+					        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					      </div>
+					      <div class="modal-body">
+					      <div th:if = "${paymentMethods == null}">
+						       	<form method = "post" th:action="@{/addPayment}">
+						       		<h6>Card Type</h6>
+							       	<select th:name = "cardType" class="form-select" aria-label="Customer Card Type: ">
+									  <option selected>Open this select menu</option>
+									  <option value="Debit">Debit</option>
+									  <option value="Credit">Credit</option>
+									</select>
+									<br>
+									<h6>Card Number</h6>
+									<input th:name = "customerCardNumber"
+										   type = "number" 
+										   oninput = "javascript: if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength)" 
+										   maxlength="16">
+									<h6>CVV</h6>
+									<input th:name = "cvvNumber"
+										   type = "number" 
+										   oninput = "javascript: if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength)" 
+										   maxlength="3">
+									<h6>Expiry Date</h6>
+									<input type="date" th:name = "tempExpDate" id="txtDate" />
+									<h6>Card Name:</h6>
+									<input type="text" th:name = "cardName" maxlength="50" />
+									<br>
+									<br>
+									<input type = "submit" value = "Submit" class = "btn btn-primary">
+						       	</form>
+					       	</div>
+					       	<div th:if = "${paymentMethods != null}">
+					       		
+					       			<table class = "table">
+					       				<tr>
+					       					<td>Card Name:</td>
+					       					<td>Card Number:</td>
+					       					<td>Card Type:</td>
+					       					<td>Action:</td> 
+					       				</tr>
+					       				<tr th:each = "method: ${paymentMethods}">
+					       					<form method = "post" th:action = "@{/payCart}">
+						       					<td th:text = "${method.cardName}"></td>
+						       					<td th:text = "${method.cardNumber}"></td>
+						       					<td th:text = "${method.cardType}"></td>
+						       					<td>
+						       						<input type = "hidden" th:value = "method.id" name = "paymentId">
+						       						<input type = "submit" value = "Pay" class = "btn btn-success">
+						       					</td>
+					       					</form>
+					       				</tr>
+					       			</table>
+					       		
+					       	</div>
+					      </div>
+					      <div class="modal-footer">
+					        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+					        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPayment">
+							 	Add Payment
+							</button>
+					      </div>
+					    </div>
+					  </div>
+					</div>
+				</div>
+			</div>
+			<div class = "col">
+			<div class = "productDiv">
+			<h1>Products Available</h1>
+				<Table class="table">
+				<tr>
+					<td>#</td>
+					<td>Product Name</td>
+					<td>Brand</td>
+					<td>Description</td>
+					<td>Category</td>
+					<td>Product Price</td>
+				</tr>
+					<tr th:each="products: ${productsList}">
+						<form th:action = "@{/addToCart}" method = "post" >
+							<td th:text="${products.id}"></td>
+						    <td th:text="${products.productName}" />
+						    <td th:text="${products.brand}" />
+						    <td th:text="${products.description}" />
+						    <td th:text="${products.category}" />
+						    <td th:text="${products.price}" />
+						    <td>
+						    <input type="hidden" th:value="${products.id}" name = "productId"/>
+						    <input type = "submit" value = "add to cart" class = "btn btn-success">
+					    	</td>
+				    	</form>
+					</tr>
+				
+				</Table>
+				
+			</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="addPayment" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="exampleModalLabel">Add Payment</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body">
+			<form method = "post" th:action="@{/addPayment}">
+				<h6>Card Type</h6>
+				<select th:name = "cardType" class="form-select" aria-label="Customer Card Type: ">
+				  <option selected>Open this select menu</option>
+				  <option value="Debit">Debit</option>
+				  <option value="Credit">Credit</option>
+				</select>
+				<br>
+				<h6>Card Number</h6>
+				<input th:name = "customerCardNumber"
+					   type = "number" 
+					   oninput = "javascript: if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength)" 
+					   maxlength="16">
+				<h6>CVV</h6>
+				<input th:name = "cvvNumber"
+					   type = "number" 
+					   oninput = "javascript: if(this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength)" 
+					   maxlength="3">
+				<h6>Expiry Date</h6>
+				<input type="date" th:name = "tempExpDate" id="txtDate" />
+				<h6>Card Name:</h6>
+				<input type="text" th:name = "cardName" maxlength="50" />
+				<br>
+				<br>
+				<input type = "submit" value = "Submit" class = "btn btn-primary">
+			</form>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<h1></h1>
+	
+	<script type="text/javascript">
+	    var dateControler = {
+		    currentDate : null
+		}
+
+		 $(document).on( "change", "#txtDate",function( event, ui ) {
+		        var now = new Date();
+		        var selectedDate = new Date($(this).val());
+		        
+		        if(selectedDate < now) {
+		            $(this).val(dateControler.currentDate)
+		        } else {
+		            dateControler.currentDate = $(this).val();
+		        }
+		    });   
+	</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+</body>
+</html>
